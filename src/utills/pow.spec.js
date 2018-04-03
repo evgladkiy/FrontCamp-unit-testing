@@ -1,4 +1,24 @@
-import power from './pow';
+import { power, elevate } from './pow';
+
+describe('elevate function should work correctly', () => {
+    it('should elevate correctly to a positive power', () => {
+        expect(elevate(2, 2)).toBe(4);
+        expect(elevate(2, 10)).toBe(1024);
+        expect(elevate(4, 4)).toBe(256);
+        expect(elevate(7, 7)).toBe(823543);
+        expect(elevate(91, 5)).toBe(6240321451);
+        expect(elevate(3, 14)).toBe(4782969);
+    });
+
+    it('should elevate correctly to a negative power', () => {
+        expect(elevate(2, 2, true)).toBe(0.25);
+        expect(elevate(2, 10, true)).toBe(0.0009765625);
+        expect(elevate(4, 4, true)).toBe(0.00390625);
+        expect(elevate(5, 2, true)).toBe(0.04);
+        expect(elevate(5, 1, true)).toBe(0.2);
+        expect(elevate(10, 3, true)).toBe(0.001);
+    });
+});
 
 describe('power function should process invalid first argument', () => {
     it('should throw the error if passed null in input', () => {
@@ -14,7 +34,7 @@ describe('power function should process invalid first argument', () => {
     });
 
     it('should throw the error if passed not number string as first argument test2', () => {
-        expect(() => power('123.123', 2)).toThrow('Invalid input value');
+        expect(() => power('123.123.34', 2)).toThrow('Invalid input value');
     });
 
     it('should throw the error if passed Date as first argument', () => {
@@ -42,25 +62,35 @@ describe('power function should process invalid first argument', () => {
     });
 });
 
-describe('Power function should process invalid second argument', () => {
+describe('power function should process invalid second argument', () => {
+
     it('should throw the error if argument is not an integer test1', () => {
-        expect(() => power(2, 0.1)).toThrow('Invalid pow. Function can\'t process that power');
+        expect(() => power(2, 0.1))
+            .toThrow('Invalid pow. Function can\'t process that power');
     });
 
     it('should throw the error if argument is not an integer test2', () => {
-        expect(() => power(2, 3.5)).toThrow('Invalid pow. Function can\'t process that power');
+        expect(() => power(2, 3.5))
+            .toThrow('Invalid pow. Function can\'t process that power');
     });
 
     it('should throw the error if argument is not an integer test3', () => {
-        expect(() => power(2, -0.999)).toThrow('Invalid pow. Function can\'t process that power');
+        expect(() => power(2, -0.999))
+            .toThrow('Invalid pow. Function can\'t process that power');
     });
 
     it('should throw the error if argument is not an integer test4', () => {
-        expect(() => power(2, -1.01)).toThrow('Invalid pow. Function can\'t process that power');
+        expect(() => power(2, -1.01))
+            .toThrow('Invalid pow. Function can\'t process that power');
     });
 
     it('should throw the error if argument is not an integer test5', () => {
-        expect(() => power(2, -10.1)).toThrow('Invalid pow. Function can\'t process that power');
+        expect(() => power(2, -10.12))
+            .toThrow('Invalid pow. Function can\'t process that power');
+    });
+
+    it('should throw the error if input value === 0 && pow < 0', () => {
+        expect(() => power(0, -0.1)).toThrow('Invalid pow value');
     });
 
     it('should throw the error if passed null in input', () => {
@@ -76,7 +106,7 @@ describe('Power function should process invalid second argument', () => {
     });
 
     it('should throw the error if passed not number string as first argument test2', () => {
-        expect(() => power(2, '123.123')).toThrow('Invalid pow value');
+        expect(() => power(2, '123.123.1')).toThrow('Invalid pow value');
     });
 
     it('should throw the error if passed Date as first argument', () => {
@@ -94,34 +124,20 @@ describe('power function should work correctly', () => {
         expect(power(-3.25, 0)).toBe(1);
     });
 
-    it('should elevate correctly to a positive power', () => {
-        expect(power(2, 2)).toBe(4);
-        expect(power(2, 10)).toBe(1024);
-        expect(power(4, 4)).toBe(256);
-        expect(power(7, 7)).toBe(823543);
-        expect(power(91, 5)).toBe(6240321451);
-        expect(power(3, 14)).toBe(4782969);
-    });
-
-    it('should elevate correctly to a negative power', () => {
-        expect(power(2, -2)).toBe(0.25);
-        expect(power(2, -10)).toBe(0.0009765625);
-        expect(power(4, -4)).toBe(0.00390625);
-        expect(power(5, -2)).toBe(0.04);
-        expect(power(5, -1)).toBe(0.2);
-        expect(power(10, -3)).toBe(0.001);
-    });
-
     it('should elevate correctly an Array', () => {
-        expect(power([2, 2, 2], -2)).toEqual([0.25, 0.25, 0.25]);
-        expect(power([-2, -2, -2], 2)).toEqual([4, 4, 4]);
-        expect(power([2, 2, 2], 2)).toEqual([4, 4, 4]);
-        expect(power([2, 2, 2], -2)).toEqual([0.25, 0.25, 0.25]);
-        expect(power(['2', 2, 2.0, '2.0'], -2)).toEqual([0.25, 0.25, 0.25, 0.25]);
-        // expect(power(2, -10)).toBe(0.0009765625);
-        // expect(power(4, -4)).toBe(0.00390625);
-        // expect(power(5, -2)).toBe(0.04);
-        // expect(power(5, -1)).toBe(0.2);
-        // expect(power(10, -3)).toBe(0.001);
+        expect(power([-4, 4, -4], 3)).toEqual([-64, 64, -64]);
+        expect(power([-4, 4, -4], -3)).toEqual([-0.015625, 0.015625, -0.015625]);
+        expect(power(['4', -2, 4.0, '2.0'], 3)).toEqual([64, -8, 64, 8]);
+        expect(power(['4', -2, 4.0, '2.0'], -3)).toEqual([0.015625, -0.125, 0.015625, 0.125]);
+    });
+
+    it('should pass final tests', () => {
+        expect(power(5, '6.0')).toBe(15625);
+        expect(power('8.0', -3.0)).toEqual(0.001953125);
+        expect(power(11231230, '0')).toBe(1);
+        expect(power(11231230, 0)).toBe(1);
+        expect(power(0, '133')).toBe(0);
+        expect(power(['-2.0', -1, 0, '1', 2.0], 3)).toEqual([-8, -1, 0, 1, 8]);
+        expect(power([['-2.0'], [-1], [[0]], ['1'], [2.0]], 3)).toEqual([[-8], [-1], [[0]], [1], [8]]);
     });
 });
