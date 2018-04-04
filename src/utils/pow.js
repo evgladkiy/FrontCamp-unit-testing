@@ -16,7 +16,7 @@ export function power(input, pow) {
         return input.map(num => power(num, numPow));
     } else if (parseInt(input, 10) !== numInput) {
         throw new Error('Invalid input value');
-    } else if ((numPow !== parseFloat(pow, 10)) || (numInput === 0 && numPow <= 0)) {
+    } else if ((numPow !== parseFloat(pow)) || (numInput === 0 && numPow <= 0)) {
         throw new Error('Invalid pow value');
     } else if (Math.floor(pow) !== numPow) {
         throw new Error('Invalid pow. Function can\'t process that power');

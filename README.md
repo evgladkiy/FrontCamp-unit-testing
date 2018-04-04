@@ -2,7 +2,9 @@
 
 ### How to run app:
 1) npm run test - for testing;
-2) npm run test:coverage -for coverage
+2) npm run test:power - testing power func
+3) npm run test:stryker - run stryker
+4) npm run test:coverage - for coverage
 
 ### Rate Criterias:
 Read and watch additional materials;
